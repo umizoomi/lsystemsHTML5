@@ -1,24 +1,41 @@
-var variables = "AB";
-var constants = "+-";
-var start = "A";
-var rules = "A=B-A-B,B=A+B+A";
-var angle = 25;
+angle = 60;
+distance = 10;
+iterations = 6;
+speed = 20;
+mode = "delay";
+startPosX = 700;
+startPosY = 900;
 
-derp = new sierpinski(4, 60);
-derp.createFractal("delay", 0.5);
-function banaan(){
-	function beepbep(){
-		for(i = 0; i < 100; i++){
-		log("aANGIJWNG " + i);
-		}
+var turtle = new turtle(startPosX, startPosY, angle);
+var ctx = new draw("canvas");
+
+createSierpinski(mode, speed);
+
+$("#angle").html(angle + "&deg;");
+
+$("#angleMin").click(function(){
+	angle = angle - 5;
+	setAngleLbl();
+	chkbox = $("#angleLive").is(":checked");
+	if(chkbox == false){
+		breakloop = true;
+		turtle.resetTurtle();
+		createSierpinski(mode, speed);
 	}
-	beepbep();
-	for(i = 0; i < 100; i++){
-		log("hoi " + i);
+});
+$("#anglePlus").click(function(){
+	angle = angle + 5;
+	setAngleLbl();
+	chkbox = $("#angleLive").is(":checked");
+	if(chkbox == false){
+		breakloop = true;
+		turtle.resetTurtle();
+		createSierpinski(mode, speed);
 	}
-	
+});
+function setAngleLbl(){
+	$("#angle").html(angle + "&deg;");
 }
-banaan();
 /*
 function sierpinski(g){
 	if(g == 0){

@@ -1,2 +1,14 @@
 #canvas {
+	float: right;
+	border: 2px dotted grey;
+	margin-left: 15px;
+}
+#content {
+	float:right;
+}
+#angleMin{
+	width: 25px;
+}
+#anglePlus{
+	width: 25px;
 }

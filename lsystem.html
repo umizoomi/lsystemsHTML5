@@ -6,7 +6,15 @@
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js" charset="utf-8"></script>
 </head>
 <body>
-<canvas id="canvas" width="1000" height="1000">Your browser does not support the HTML5 canvas tag.</canvas>
+
+<canvas id="canvas" width="1400" height="1000">Your browser does not support the HTML5 canvas tag.</canvas>
+<div id="content">
+	<h1>Controls</h1>
+	<label>Current Angle: <span id="angle">0</span></label>
+	<button id="angleMin" type="button">-</button>
+	<button id="anglePlus" type="button">+</button>
+	<input id="angleLive" type="checkbox">Live
+</div>
 <script type="text/javascript" src="lsystem.js"></script>
 <script type="text/javascript" src="functions.js"></script>
 </body>
