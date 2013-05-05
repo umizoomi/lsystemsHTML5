@@ -12,7 +12,6 @@ var mode = "";
 var startPosX = 0;
 var startPosY = 0;
 
-
 var docwidth = $(document).width();
 var docheight = $(document).height();
 
@@ -39,9 +38,9 @@ function turtle(xpos, ypos, ang){
 		return position;
 	}
 	this.resetTurtle = function(){
-		this.xpos = xpos;
-		this.ypos = ypos;
-		this.angle = ang;
+		this.xpos = startPosX;
+		this.ypos = startPosY;
+		this.angle = angle;
 	}
 }
 
@@ -86,7 +85,9 @@ function drawForward(dist){
 
 /* FRACTAL FUNCTIONS */
 	/*SIERPINSKI*/
-function createSierpinski(mode, speed){
+function createSierpinski(mode, newDrawing, speed){
+    newDrawing = (typeof newDrawing === "undefined") ? false : newDrawing;
+    speed = (typeof speed === "undefined") ? "no_speed_isset" : speed;
 	ctx.clearCanvas();
 	string = sierpinski(iterations);
 	if (mode == "normal"){
@@ -120,8 +121,13 @@ function createSierpinski(mode, speed){
 				i++;
 				if (i < string.length){
 					if (breakloop == true){
-						breakloop = false;
-						return false;
+						if (newDrawing == true){
+						    daLoop();
+						}
+						else{
+						    breakloop = false;
+						    return false;
+						}
 					}
 					else{
 						daLoop();

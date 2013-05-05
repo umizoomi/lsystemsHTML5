@@ -2,14 +2,14 @@ angle = 60;
 distance = 10;
 iterations = 6;
 speed = 20;
-mode = "delay";
+mode = "normal";
 startPosX = 700;
 startPosY = 900;
 
 var turtle = new turtle(startPosX, startPosY, angle);
 var ctx = new draw("canvas");
 
-createSierpinski(mode, speed);
+createSierpinski(mode, false, speed);
 
 $("#angle").html(angle + "&deg;");
 
@@ -20,7 +20,7 @@ $("#angleMin").click(function(){
 	if(chkbox == false){
 		breakloop = true;
 		turtle.resetTurtle();
-		createSierpinski(mode, speed);
+		createSierpinski(mode, true, speed);
 	}
 });
 $("#anglePlus").click(function(){
@@ -30,7 +30,7 @@ $("#anglePlus").click(function(){
 	if(chkbox == false){
 		breakloop = true;
 		turtle.resetTurtle();
-		createSierpinski(mode, speed);
+		createSierpinski(mode, true, speed);
 	}
 });
 function setAngleLbl(){
