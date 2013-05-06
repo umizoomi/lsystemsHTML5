@@ -7,7 +7,7 @@ var drawready = true; //set on false while the script is busy drawing
 var angle = 0;
 var distance = 0;
 var iterations = 0;
-var speed = 0; //Drawing speed in ms
+var speed = 0;
 var string = "";
 var mode = ""; //Available at the moment: Normal, Delay
 
@@ -161,7 +161,95 @@ function sierpinskiLoop(string){
 	return n;
 }
 	/*PLANT*/
-	
+function createPlant(mode, newDrawing){
+    newDrawing = (typeof newDrawing === "undefined") ? false : newDrawing;
+	ctx.clearCanvas();
+	string = plant(iterations);
+	positionHolder = [];
+	if (mode == "normal"){
+		drawready = false;
+		for(i = 0; i < string.length; i++){
+			c = string.charAt(i);
+			if (c == "f"){
+				drawForward(distance);
+			} else if (c == "["){
+				positionHolder.push(turtle.xpos);
+				positionHolder.push(turtle.ypos);
+				positionHolder.push(turtle.angle);
+			} else if (c == "]"){
+				turtle.angle = positionHolder.pop();
+				turtle.ypos = positionHolder.pop();
+				turtle.xpos = positionHolder.pop();
+			} else if (c == "+"){
+				turtle.turnRight(angle);
+			} else if (c == "-"){
+				turtle.turnLeft(angle);
+			}
+		}
+		breakloop = false;
+		drawready = true;
+	}
+	else if (mode == "delay"){
+		var i = 0;
+			function daLoop(){
+			setTimeout(function(){
+				if (breakloop == true){
+					breakloop = false;
+					drawready = true;
+					return false;
+				}
+				drawready = false;
+				c = string.charAt(i);
+				if (c == "f"){
+				drawForward(distance);
+				} else if (c == "["){
+					positionHolder.push(turtle.xpos);
+					positionHolder.push(turtle.ypos);
+					positionHolder.push(turtle.angle);
+				} else if (c == "]"){
+					turtle.angle = positionHolder.pop();
+					turtle.ypos = positionHolder.pop();
+					turtle.xpos = positionHolder.pop();
+				} else if (c == "+"){
+					turtle.turnRight(angle);
+				} else if (c == "-"){
+					turtle.turnLeft(angle);
+				}
+				i++;
+				if (i < string.length){
+					drawready = false;
+					daLoop();
+				} else{
+					breakloop = false;
+					drawready = true;
+				}
+			}, speed);
+		}
+		daLoop();
+	}
+}
+function plant(t){
+	if (t == 0){
+		return "x";
+	} else{
+		return plantLoop(plant(t-1));
+	}
+}
+function plantLoop(string){
+	var n = "";
+		
+	for(i = 0; i < string.length; i++){
+		c = string.charAt(i);
+		if (c == "x"){
+			n += "f-[[x]+x]+f[+fx]-x";
+		} else if (c == "f"){
+			n += "ff";
+		} else{
+			n += c;
+		}
+	}
+	return n;
+}
 	
 
 /* REGISTRER EVENTS */

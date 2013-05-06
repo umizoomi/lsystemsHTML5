@@ -9,17 +9,23 @@ startPosY = 800;
 var turtle = new turtle(startPosX, startPosY, angle);
 var ctx = new draw("canvas");
 var fractal = "sierpinski";
-$("#danceFractal").click(function(){
-	alert(drawready + " " + breakloop);
-});
+
 createSierpinski(mode, false);
+
+$("#danceFractal").click(function(){
+	alert("feature not implemented");
+});
+$("#fractal").on('change', function(){
+	changeFractal();
+});
+$("#distance").on('change', function(){
+	changeDistance();
+});
+$("#generations").on('change', function(){
+	changeGenerations();
+});
 $("#mode").on('change', function(){
-	mode = $("#mode").val();
-	if (mode == "normal"){
-		breakloop = true;
-	}
-	createFractal();
-	updateControls();
+	changeMode();
 });
 $("#angleMin").mousehold(function(){
 	lowerAngle();
@@ -37,16 +43,20 @@ function createFractal(reset){
 				distance = 10;
 				iterations = 6;
 				speed = 20;
-				updateStartPos();
+				startPosX = 500;
+				startPosY = 800;
+				turtle.resetTurtle();
 			}
 			createSierpinski(mode, true);
 		} else if (fractal == "plant"){
 			if(reset == true){
-				angle = 60;
-				distance = 10;
+				angle = 25;
+				distance = 3.5;
 				iterations = 6;
-				speed = 20;
-				updateStartPos();
+				speed = 5;
+				startPosX = 950;
+				startPosY = 800;
+				turtle.resetTurtle();
 			}
 			createPlant(mode, true);
 		}
@@ -63,14 +73,38 @@ function checkboxLiveCheck(){
 		$(".livechk").removeAttr("disabled");
 	}
 }
+function changeFractal(){
+	fractal = $("#fractal").val();
+	checkDrawReady();
+	createFractal(true);
+}
+function changeDistance(){
+	distance = $("#distance").val();
+	chkbox = $("#distanceLive").is(":checked");
+	if(chkbox == false || mode == "normal"){
+		checkDrawReady();
+		createFractal();
+	}
+	updateControls();
+}
+function changeMode(){
+	mode = $("#mode").val();
+	checkDrawReady();
+	createFractal();
+	updateControls();
+}
+function changeGenerations(){
+	iterations = $("#generations").val();
+	checkDrawReady();
+	createFractal();
+	updateControls();
+}
 function lowerAngle(){
 	angle = angle - 1;
 	updateControls();
 	chkbox = $("#angleLive").is(":checked");
-	if(chkbox == false){
-		if(!drawready){
-			breakloop = true;
-		}
+	if(chkbox == false || mode == "normal"){
+		checkDrawReady();
 		createFractal();
 	}
 }
@@ -78,15 +112,17 @@ function higherAngle(){
 	angle = angle + 1;
 	updateControls();
 	chkbox = $("#angleLive").is(":checked");
-	if(chkbox == false){
-		if(!drawready){
-			breakloop = true;
-		}
+	if(chkbox == false || mode == "normal"){
+		checkDrawReady();
 		createFractal();
 	}
 }
-function updateStartPos(){
-
+function checkDrawReady(){
+	if(!drawready){
+		breakloop = true;
+	} else{
+		return false;
+	}
 }
 function updateControls(){
 	$("#generations").val(iterations);
