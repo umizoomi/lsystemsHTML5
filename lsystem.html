@@ -3,11 +3,12 @@
 <head>
 	<link rel="stylesheet" href="style.css" type="text/css" />
 	<title>L-System in HTML5</title>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js" charset="utf-8"></script>
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="../jquery.mousehold.js"></script>
 </head>
 <body>
 
-<canvas id="canvas" width="1400" height="1000">Your browser does not support the HTML5 canvas tag.</canvas>
+<canvas id="canvas" width="1000" height="850">Your browser does not support the HTML5 canvas tag.</canvas>
 <div id="content">
 	<h1>Controls</h1>
 	<label>Fractal </label>
@@ -15,15 +16,21 @@
         <option>Sierpinski</option>
         <option>Plant</option>
     </select><br />
+	<label>Generations </label>
+	<input id="generations" type="number" value="1" min="1" max="10"><br />
 	<label>Mode </label>
 	<select id="mode">
-	    <option>Normal</option>
-	    <option>Delay(warning, doesnt work correctly(yet))</option>
+	    <option>normal</option>
+	    <option>delay</option>
 	</select><br />
 	<label>Current Angle: <span id="angle">0</span></label>
 	<button id="angleMin" type="button">-</button>
 	<button id="anglePlus" type="button">+</button>
-	<input id="angleLive" type="checkbox">Live
+	<input id="angleLive" class="livechk" type="checkbox">Live<br />
+	<label>Current Distance: </label>
+	<input id="distance" type="number" value="1" min="1" max="50">
+	<input id="distanceLive" class="livechk" type="checkbox">Live<br />
+	<button id="danceFractal" type="button">RANDOM!!</button>
 </div>
 <script type="text/javascript" src="lsystem.js"></script>
 <script type="text/javascript" src="functions.js"></script>

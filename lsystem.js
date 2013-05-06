@@ -1,13 +1,15 @@
 var enablelog = true;
 var randomcolor = true;
-var breakloop = false;
+var breakloop = false; //set on true if the time out loop needs to be broken
+var drawready = true; //set on false while the script is busy drawing
 
+/* Fractal Settings */
 var angle = 0;
 var distance = 0;
 var iterations = 0;
-var speed = 0;
+var speed = 0; //Drawing speed in ms
 var string = "";
-var mode = "";
+var mode = ""; //Available at the moment: Normal, Delay
 
 var startPosX = 0;
 var startPosY = 0;
@@ -15,7 +17,7 @@ var startPosY = 0;
 var docwidth = $(document).width();
 var docheight = $(document).height();
 
-/* GENERAL CLASSES */
+/* General Classes */
 function turtle(xpos, ypos, ang){
 	this.xpos = xpos;
 	this.ypos = ypos;
@@ -59,7 +61,7 @@ function draw(cid){
 	}
 }
 
-/* FUNCTIONS */
+/* Functions */
 function getRandomColor() {
 	var letters = '0123456789ABCDEF'.split('');
 	var color = '#';
@@ -83,58 +85,55 @@ function drawForward(dist){
 	ctx.drawLine(oldp, newp, col);
 }
 
-/* FRACTAL FUNCTIONS */
+/* Fractals */
+
 	/*SIERPINSKI*/
-function createSierpinski(mode, newDrawing, speed){
+function createSierpinski(mode, newDrawing){
     newDrawing = (typeof newDrawing === "undefined") ? false : newDrawing;
-    speed = (typeof speed === "undefined") ? "no_speed_isset" : speed;
 	ctx.clearCanvas();
 	string = sierpinski(iterations);
 	if (mode == "normal"){
+		drawready = false;
 		for(i = 0; i < string.length; i++){
 			c = string.charAt(i);
 			if (c == "a" || c == "b"){
 				drawForward(distance);
-			}
-			else if (c == "-"){
+			} else if (c == "-"){
 				turtle.turnRight(angle);
-			}
-			else{
+			} else{
 				turtle.turnLeft(angle);
 			}
 		}
+		breakloop = false;
+		drawready = true;
 	}
 	else if (mode == "delay"){
 		var i = 0;
 			function daLoop(){
 			setTimeout(function(){
+				if (breakloop == true){
+					breakloop = false;
+					drawready = true;
+					return false;
+				}
+				drawready = false;
 				c = string.charAt(i);
 				if (c == "a" || c == "b"){
 					drawForward(distance);
-				}
-				else if (c == "-"){
+				} else if (c == "-"){
 					turtle.turnRight(angle);
-				}
-				else{
+				} else{
 					turtle.turnLeft(angle);
 				}
 				i++;
 				if (i < string.length){
-					if (breakloop == true){
-						if (newDrawing == true){
-						    daLoop();
-						}
-						else{
-						    breakloop = false;
-						    return false;
-						}
-					}
-					else{
-						daLoop();
-					}
+					drawready = false;
+					daLoop();
+				} else{
+					breakloop = false;
+					drawready = true;
 				}
-				log("cmon");
-			}, speed)
+			}, speed);
 		}
 		daLoop();
 	}
@@ -142,8 +141,7 @@ function createSierpinski(mode, newDrawing, speed){
 function sierpinski(t){
 	if (t == 0){
 		return "a";
-	}
-	else{
+	} else{
 		return sierpinskiLoop(sierpinski(t-1));
 	}
 }
@@ -154,14 +152,11 @@ function sierpinskiLoop(string){
 		c = string.charAt(i);
 		if (c == "a"){
 			n += "b-a-b";
-		}
-		else if (c == "b"){
+		} else if (c == "b"){
 			n += "a+b+a";
-		}
-		else{
+		} else{
 			n += c;
 		}
-		log("asfdg31g");
 	}
 	return n;
 }

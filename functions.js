@@ -1,41 +1,107 @@
 angle = 60;
 distance = 10;
 iterations = 6;
-speed = 20;
+speed = 10;
 mode = "normal";
-startPosX = 700;
-startPosY = 900;
+startPosX = 500;
+startPosY = 800;
 
 var turtle = new turtle(startPosX, startPosY, angle);
 var ctx = new draw("canvas");
-
-createSierpinski(mode, false, speed);
-
-$("#angle").html(angle + "&deg;");
-
-$("#angleMin").click(function(){
-	angle = angle - 5;
-	setAngleLbl();
-	chkbox = $("#angleLive").is(":checked");
-	if(chkbox == false){
-		breakloop = true;
-		turtle.resetTurtle();
-		createSierpinski(mode, true, speed);
-	}
+var fractal = "sierpinski";
+$("#danceFractal").click(function(){
+	alert(drawready + " " + breakloop);
 });
-$("#anglePlus").click(function(){
-	angle = angle + 5;
-	setAngleLbl();
-	chkbox = $("#angleLive").is(":checked");
-	if(chkbox == false){
+createSierpinski(mode, false);
+$("#mode").on('change', function(){
+	mode = $("#mode").val();
+	if (mode == "normal"){
 		breakloop = true;
-		turtle.resetTurtle();
-		createSierpinski(mode, true, speed);
 	}
+	createFractal();
+	updateControls();
 });
-function setAngleLbl(){
-	$("#angle").html(angle + "&deg;");
+$("#angleMin").mousehold(function(){
+	lowerAngle();
+});
+$("#anglePlus").mousehold(function(){
+	higherAngle();
+});
+function createFractal(reset){
+	reset = (typeof reset === "undefined") ? false : reset;
+	if (drawready == true){
+		turtle.resetTurtle();
+		if(fractal == "sierpinski"){
+			if(reset == true){
+				angle = 60;
+				distance = 10;
+				iterations = 6;
+				speed = 20;
+				updateStartPos();
+			}
+			createSierpinski(mode, true);
+		} else if (fractal == "plant"){
+			if(reset == true){
+				angle = 60;
+				distance = 10;
+				iterations = 6;
+				speed = 20;
+				updateStartPos();
+			}
+			createPlant(mode, true);
+		}
+	} else{
+		setTimeout(function(){
+			createFractal();
+		}, 0);
+	}
 }
+function checkboxLiveCheck(){
+	if(mode == "normal"){
+		$(".livechk").attr("disabled", true);
+	} else{
+		$(".livechk").removeAttr("disabled");
+	}
+}
+function lowerAngle(){
+	angle = angle - 1;
+	updateControls();
+	chkbox = $("#angleLive").is(":checked");
+	if(chkbox == false){
+		if(!drawready){
+			breakloop = true;
+		}
+		createFractal();
+	}
+}
+function higherAngle(){
+	angle = angle + 1;
+	updateControls();
+	chkbox = $("#angleLive").is(":checked");
+	if(chkbox == false){
+		if(!drawready){
+			breakloop = true;
+		}
+		createFractal();
+	}
+}
+function updateStartPos(){
+
+}
+function updateControls(){
+	$("#generations").val(iterations);
+	$("#angle").html(angle + "&deg;");
+	$("#distance").val(distance);
+	checkboxLiveCheck();
+}
+function capitaliseFirstLetter(string)
+{
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+$(document).ready(function(){
+	updateControls();
+});
 /*
 function sierpinski(g){
 	if(g == 0){
