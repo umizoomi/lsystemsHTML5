@@ -35,6 +35,7 @@ $("#anglePlus").mousehold(function(){
 });
 function createFractal(reset){
 	reset = (typeof reset === "undefined") ? false : reset;
+	checkDrawReady();
 	if (drawready == true){
 		turtle.resetTurtle();
 		if(fractal == "sierpinski"){
@@ -59,7 +60,19 @@ function createFractal(reset){
 				turtle.resetTurtle();
 			}
 			createPlant(mode, true);
+		} else if (fractal == "dragoncurve"){
+			if(reset == true){
+				angle = 90;
+				distance = 10;
+				iterations = 10;
+				speed = 5;
+				startPosX = 500;
+				startPosY = 425;
+				turtle.resetTurtle();
+			}
+			createDragoncurve(mode, true);
 		}
+		updateControls();
 	} else{
 		setTimeout(function(){
 			createFractal();

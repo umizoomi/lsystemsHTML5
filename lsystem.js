@@ -250,7 +250,80 @@ function plantLoop(string){
 	}
 	return n;
 }
-	
+	/*DRAGONCURVE*/
+function createDragoncurve(mode, newDrawing){
+    newDrawing = (typeof newDrawing === "undefined") ? false : newDrawing;
+	ctx.clearCanvas();
+	string = dragon(iterations);
+	positionHolder = [];
+	if (mode == "normal"){
+		drawready = false;
+		for(i = 0; i < string.length; i++){
+			c = string.charAt(i);
+			if (c == "f"){
+				drawForward(distance);
+			} else if (c == "+"){
+				turtle.turnRight(angle);
+			} else if (c == "-"){
+				turtle.turnLeft(angle);
+			}
+		}
+		breakloop = false;
+		drawready = true;
+	}
+	else if (mode == "delay"){
+		var i = 0;
+			function daLoop(){
+			setTimeout(function(){
+				if (breakloop == true){
+					breakloop = false;
+					drawready = true;
+					return false;
+				}
+				drawready = false;
+				c = string.charAt(i);
+				if (c == "f"){
+					drawForward(distance);
+				} else if (c == "+"){
+					turtle.turnRight(angle);
+				} else if (c == "-"){
+					turtle.turnLeft(angle);
+				}
+				i++;
+				if (i < string.length){
+					drawready = false;
+					daLoop();
+				} else{
+					breakloop = false;
+					drawready = true;
+				}
+			}, speed);
+		}
+		daLoop();
+	}
+}
+function dragon(t){
+	if (t == 0){
+		return "fx";
+	} else{
+		return dragonLoop(dragon(t-1));
+	}
+}
+function dragonLoop(string){
+	var n = "";
+		
+	for(i = 0; i < string.length; i++){
+		c = string.charAt(i);
+		if (c == "x"){
+			n += "x+yf";
+		} else if (c == "y"){
+			n += "fx-y";
+		} else{
+			n += c;
+		}
+	}
+	return n;
+}
 
 /* REGISTRER EVENTS */
 $(document).ready(function(){
