@@ -74,9 +74,15 @@ function createFractal(reset){
 		}
 		updateControls();
 	} else{
-		setTimeout(function(){
-			createFractal();
-		}, 0);
+		if (reset == true){
+			setTimeout(function(){
+				createFractal(true);
+			}, 0);
+		} else{
+			setTimeout(function(){
+				createFractal();
+			}, 0);
+		}
 	}
 }
 function checkboxLiveCheck(){
